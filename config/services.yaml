@@ -18,3 +18,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    #App\Tool\GetSecuritySpecificationTool: ~
+
+    App\Factory\ToolFactory:
+        arguments:
+            $tools:
+                get_security_specification: '@App\Tool\GetSecuritySpecificationTool'
+                get_security_indices: '@App\Tool\GetSecurityIndicesTool'

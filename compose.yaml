@@ -1,0 +1,17 @@
+volumes:
+  cache: # cache for composer, psalm, etc
+
+services:
+  moex-mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: moex-mcp-server:latest
+    container_name: moex-mcp-server
+    working_dir: /app
+    environment:
+      APP_ENV: dev
+    volumes:
+      - "./:/app"
+      - "cache:/cache"
+    command: ["php", "bin/console"]
