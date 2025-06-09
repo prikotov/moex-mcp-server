@@ -9,18 +9,19 @@ use Mcp\Types\Tool;
 use Mcp\Types\ToolInputProperties;
 use Mcp\Types\ToolInputSchema;
 
-class GetSecuritySpecificationTool implements ToolInterface
+class GetSecurityAggregatesTool implements ToolInterface
 {
     private const string PARAMETER_SECURITY = 'security';
+    private const string PARAMETER_DATE = 'date';
 
     public function getName(): string
     {
-        return ToolNameEnum::getSecuritySpecification->value;
+        return ToolNameEnum::getSecurityAggregates->value;
     }
 
     public function getDescription(): string
     {
-        return 'Получить спецификацию инструмента.';
+        return 'Агрегированные итоги торгов за дату по рынкам.';
     }
 
     public function getTool(): Tool
@@ -29,8 +30,11 @@ class GetSecuritySpecificationTool implements ToolInterface
             self::PARAMETER_SECURITY => [
                 'type' => 'string',
                 'description' => 'Тикер инструмента'
-            ]
-        ]);
+            ],
+            self::PARAMETER_DATE => [
+                'type' => 'string',
+                'description' => 'Дата за которую необходимо отобразить данные. По умолчанию за последнюю дату в итогах торгов. Формат даты YYYY-MM-DD.'
+            ]]);
 
         $inputSchema = new ToolInputSchema(
             properties: $properties,
@@ -68,11 +72,26 @@ class GetSecuritySpecificationTool implements ToolInterface
 
         $data = [
             'iss.meta' => 'off',
-            'iss.only' => 'description',
+            'iss.only' => 'aggregates',
             'iss.json' => 'extended',
         ];
+
+        $date = $params[self::PARAMETER_DATE] ?? null;
+        if ($date !== null) {
+            $normalizeDate = $this->normalizeDate($date);
+            if ($normalizeDate === null) {
+                return new CallToolResult(
+                    content: [new TextContent(
+                        text: 'Error: "' . self::PARAMETER_DATE . '" is not a valid date.'
+                    )],
+                    isError: true
+                );
+            }
+            $data['date'] = $normalizeDate;
+        }
+
         $url = sprintf(
-            "https://iss.moex.com/iss/securities/%s.json?%s",
+            "https://iss.moex.com/iss/securities/%s/aggregates.json?%s",
             $security,
             http_build_query($data)
         );
@@ -89,5 +108,11 @@ class GetSecuritySpecificationTool implements ToolInterface
                 text: $content
             )]
         );
+    }
+
+    private function normalizeDate(string $date): ?string
+    {
+        $dt = date_create_immutable($date);
+        return $dt === false ? null : $dt->format('Y-m-d');
     }
 }

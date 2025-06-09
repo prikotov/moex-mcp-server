@@ -16,6 +16,7 @@ class ToolsList
         return [
             ToolNameEnum::getSecuritySpecification,
             ToolNameEnum::getSecurityIndices,
+            ToolNameEnum::getSecurityAggregates,
         ];
     }
 }

@@ -11,7 +11,7 @@ use Mcp\Types\ToolInputSchema;
 
 class GetSecurityIndicesTool implements ToolInterface
 {
-    private const string PARAMETER_NAME = 'security';
+    private const string PARAMETER_SECURITY = 'security';
 
     public function getName(): string
     {
@@ -26,7 +26,7 @@ class GetSecurityIndicesTool implements ToolInterface
     public function getTool(): Tool
     {
         $properties = ToolInputProperties::fromArray([
-            self::PARAMETER_NAME => [
+            self::PARAMETER_SECURITY => [
                 'type' => 'string',
                 'description' => 'Тикер инструмента'
             ]
@@ -34,7 +34,7 @@ class GetSecurityIndicesTool implements ToolInterface
 
         $inputSchema = new ToolInputSchema(
             properties: $properties,
-            required: [self::PARAMETER_NAME]
+            required: [self::PARAMETER_SECURITY]
         );
 
         return new Tool(
@@ -48,28 +48,41 @@ class GetSecurityIndicesTool implements ToolInterface
     {
         $params = $args[0] ?? [];
 
-        if (!is_array($params) || !isset($params[self::PARAMETER_NAME])) {
+        if (!is_array($params) || !isset($params[self::PARAMETER_SECURITY])) {
             return new CallToolResult(
                 content: [new TextContent(
-                    text: "Missing parameter: " . self::PARAMETER_NAME . "."
+                    text: "Missing parameter: " . self::PARAMETER_SECURITY . "."
                 )],
                 isError: true
             );
         }
-        $security = $params[self::PARAMETER_NAME];
+        $security = $params[self::PARAMETER_SECURITY];
         if (empty($security)) {
             return new CallToolResult(
                 content: [new TextContent(
-                    text: "Error: " . self::PARAMETER_NAME . " cannot be empty"
+                    text: 'Error: "' . self::PARAMETER_SECURITY . '" cannot be empty.'
                 )],
                 isError: true
             );
         }
 
-        $content = file_get_contents(sprintf(
-            "https://iss.moex.com/iss/securities/%s/indices.json?iss.meta=off&iss.only=description&iss.json=extended&only_actual=1",
-            $security
-        ));
+        $data = [
+            'iss.meta' => 'off',
+            'iss.json' => 'extended',
+            'only_actual' => 1,
+        ];
+        $url = sprintf(
+            "https://iss.moex.com/iss/securities/%s/indices.json?%s",
+            $security,
+            http_build_query($data)
+        );
+        $content = @file_get_contents($url);
+        if ($content === false) {
+            return new CallToolResult(
+                content: [new TextContent(text: "Error: Unable to fetch data from ISS: " . $url)],
+                isError: true
+            );
+        }
 
         return new CallToolResult(
             content: [new TextContent(
