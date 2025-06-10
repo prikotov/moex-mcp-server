@@ -2,7 +2,9 @@
 
 namespace App\Tool;
 
+use App\Component\MoexIssComponentInterface;
 use App\Enum\ToolNameEnum;
+use App\Exception\InfrastructureExceptionInterface;
 use Mcp\Types\CallToolResult;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
@@ -13,6 +15,11 @@ class GetSecurityAggregatesTool implements ToolInterface
 {
     private const string PARAMETER_SECURITY = 'security';
     private const string PARAMETER_DATE = 'date';
+
+    public function __construct(
+        private readonly MoexIssComponentInterface $moexComponent,
+    ) {
+    }
 
     public function getName(): string
     {
@@ -34,7 +41,8 @@ class GetSecurityAggregatesTool implements ToolInterface
             self::PARAMETER_DATE => [
                 'type' => 'string',
                 'description' => 'Дата за которую необходимо отобразить данные. По умолчанию за последнюю дату в итогах торгов. Формат даты YYYY-MM-DD.'
-            ]]);
+            ]
+        ]);
 
         $inputSchema = new ToolInputSchema(
             properties: $properties,
@@ -70,12 +78,9 @@ class GetSecurityAggregatesTool implements ToolInterface
             );
         }
 
-        $data = [
-            'iss.meta' => 'off',
+        $query = [
             'iss.only' => 'aggregates',
-            'iss.json' => 'extended',
         ];
-
         $date = $params[self::PARAMETER_DATE] ?? null;
         if ($date !== null) {
             $normalizeDate = $this->normalizeDate($date);
@@ -87,18 +92,18 @@ class GetSecurityAggregatesTool implements ToolInterface
                     isError: true
                 );
             }
-            $data['date'] = $normalizeDate;
+            $query['date'] = $normalizeDate;
         }
 
-        $url = sprintf(
-            "https://iss.moex.com/iss/securities/%s/aggregates.json?%s",
-            $security,
-            http_build_query($data)
-        );
-        $content = @file_get_contents($url);
-        if ($content === false) {
+        try {
+            $content = $this->moexComponent->getContent(
+                "https://iss.moex.com/iss/securities/%s/aggregates",
+                urlData: [$security],
+                query: $query
+            );
+        } catch (InfrastructureExceptionInterface $e) {
             return new CallToolResult(
-                content: [new TextContent(text: "Error: Unable to fetch data from ISS: " . $url)],
+                content: [new TextContent(text: "Unable to fetch data from MOEX: " . $e->getMessage())],
                 isError: true
             );
         }

@@ -2,7 +2,9 @@
 
 namespace App\Tool;
 
+use App\Component\MoexIssComponentInterface;
 use App\Enum\ToolNameEnum;
+use App\Exception\InfrastructureExceptionInterface;
 use Mcp\Types\CallToolResult;
 use Mcp\Types\TextContent;
 use Mcp\Types\Tool;
@@ -12,6 +14,11 @@ use Mcp\Types\ToolInputSchema;
 class GetSecuritySpecificationTool implements ToolInterface
 {
     private const string PARAMETER_SECURITY = 'security';
+
+    public function __construct(
+        private readonly MoexIssComponentInterface $moexComponent,
+    ) {
+    }
 
     public function getName(): string
     {
@@ -66,20 +73,17 @@ class GetSecuritySpecificationTool implements ToolInterface
             );
         }
 
-        $data = [
-            'iss.meta' => 'off',
-            'iss.only' => 'description',
-            'iss.json' => 'extended',
-        ];
-        $url = sprintf(
-            "https://iss.moex.com/iss/securities/%s.json?%s",
-            $security,
-            http_build_query($data)
-        );
-        $content = @file_get_contents($url);
-        if ($content === false) {
+        try {
+            $content = $this->moexComponent->getContent(
+                "https://iss.moex.com/iss/securities/%s",
+                urlData: [$security],
+                query: [
+                    'iss.only' => 'description',
+                ]
+            );
+        } catch (InfrastructureExceptionInterface $e) {
             return new CallToolResult(
-                content: [new TextContent(text: "Error: Unable to fetch data from ISS: " . $url)],
+                content: [new TextContent(text: "Unable to fetch data from MOEX: " . $e->getMessage())],
                 isError: true
             );
         }

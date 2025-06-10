@@ -43,6 +43,7 @@ class ServerCommandTest extends KernelTestCase
         $this->assertStringContainsString('get_security_specification', $toolsAsJson);
         $this->assertStringContainsString('get_security_indices', $toolsAsJson);
         $this->assertStringContainsString('get_security_aggregates', $toolsAsJson);
+        $this->assertStringContainsString('get_security_trade_data', $toolsAsJson);
     }
 
     public function testGetSecuritySpecification(): void
@@ -106,5 +107,18 @@ class ServerCommandTest extends KernelTestCase
         $this->assertTrue($res->isError);
         $this->assertStringContainsString('Error', $res->content[0]->text);
         $this->assertStringContainsString('is not a valid date', $res->content[0]->text);
+    }
+
+    public function testGetSecurityTradeData(): void
+    {
+        $session = $this->startSession();
+        $res = $session->callTool('get_security_trade_data', [
+            'security' => 'SBER',
+        ]);
+        $this->assertFalse($res->isError);
+        $resAsJson = json_encode($res, JSON_UNESCAPED_UNICODE);
+        $this->assertStringContainsString('securities', $resAsJson);
+        $this->assertStringContainsString('marketdata', $resAsJson);
+        $this->assertStringContainsString('Сбербанк', $resAsJson);
     }
 }

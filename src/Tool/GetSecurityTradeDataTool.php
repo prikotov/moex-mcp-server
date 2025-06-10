@@ -11,7 +11,7 @@ use Mcp\Types\Tool;
 use Mcp\Types\ToolInputProperties;
 use Mcp\Types\ToolInputSchema;
 
-class GetSecurityIndicesTool implements ToolInterface
+class GetSecurityTradeDataTool implements ToolInterface
 {
     private const string PARAMETER_SECURITY = 'security';
 
@@ -22,12 +22,12 @@ class GetSecurityIndicesTool implements ToolInterface
 
     public function getName(): string
     {
-        return ToolNameEnum::getSecurityIndices->value;
+        return ToolNameEnum::getSecurityTradeData->value;
     }
 
     public function getDescription(): string
     {
-        return 'Список индексов в которые входит бумага.';
+        return 'Получить данные по указанному инструменту на выбранном режиме торгов.';
     }
 
     public function getTool(): Tool
@@ -36,7 +36,7 @@ class GetSecurityIndicesTool implements ToolInterface
             self::PARAMETER_SECURITY => [
                 'type' => 'string',
                 'description' => 'Тикер инструмента'
-            ]
+            ],
         ]);
 
         $inputSchema = new ToolInputSchema(
@@ -73,12 +73,15 @@ class GetSecurityIndicesTool implements ToolInterface
             );
         }
 
+        /** @link https://iss.moex.com/iss/engines/stock/markets/shares/securities/columns - Описание полей */
         try {
             $content = $this->moexComponent->getContent(
-                "https://iss.moex.com/iss/securities/%s/indices",
+                url: "https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities/%s",
                 urlData: [$security],
                 query: [
-                    'only_actual' => 1,
+                    'iss.only' => 'securities,marketdata',
+                    'securities.columns' => 'BOARDID,BOARDNAME,SECID,SHORTNAME,SECNAME,PREVPRICE,PREVDATE,PREVLEGALCLOSEPRICE',
+                    'marketdata.columns' => 'SECID,BOARDID,OPEN,LOW,HIGH,LAST,VALTODAY,TIME,SYSTIME',
                 ]
             );
         } catch (InfrastructureExceptionInterface $e) {

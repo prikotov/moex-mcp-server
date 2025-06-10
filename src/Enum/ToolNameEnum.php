@@ -9,4 +9,5 @@ enum ToolNameEnum: string
     case getSecuritySpecification = 'get_security_specification';
     case getSecurityIndices = 'get_security_indices';
     case getSecurityAggregates = 'get_security_aggregates';
+    case getSecurityTradeData = 'get_security_trade_data';
 }

@@ -17,6 +17,7 @@ class ToolsList
             ToolNameEnum::getSecuritySpecification,
             ToolNameEnum::getSecurityIndices,
             ToolNameEnum::getSecurityAggregates,
+            ToolNameEnum::getSecurityTradeData,
         ];
     }
 }

@@ -25,3 +25,4 @@ services:
                 get_security_specification: '@App\Tool\GetSecuritySpecificationTool'
                 get_security_indices: '@App\Tool\GetSecurityIndicesTool'
                 get_security_aggregates: '@App\Tool\GetSecurityAggregatesTool'
+                get_security_trade_data: '@App\Tool\GetSecurityTradeDataTool'
