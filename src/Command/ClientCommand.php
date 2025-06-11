@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:mcp-client',
-    description: 'Протестировать mcp',
+    description: 'Протестировать MCP',
 )]
 class ClientCommand extends Command
 {
