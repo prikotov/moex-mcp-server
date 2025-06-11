@@ -20,8 +20,8 @@ class MoexIssComponent implements MoexIssComponentInterface
     )
     {
         $this->httpClient = HttpClient::create([
+            'timeout' => 10,
             'headers' => [
-                'timeout' => 10,
                 'Accept' => 'application/json',
             ],
         ]);
