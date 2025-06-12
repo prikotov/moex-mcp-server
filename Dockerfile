@@ -11,4 +11,6 @@ WORKDIR /app
 COPY composer.* ./
 RUN composer install --no-scripts --no-autoloader --no-interaction
 COPY . .
-RUN composer dump-autoload --optimize && composer run-script post-install-cmd
+RUN composer dump-autoload --optimize \
+    && composer run-script post-install-cmd \
+    && rm -rf var

@@ -1,6 +1,4 @@
 .git
-var/*
-!var/cache
-!var/log
+var/
 tests
 /vendor
