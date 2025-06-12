@@ -57,8 +57,10 @@ podman run --rm -i moex-mcp-server bin/console app:mcp-server
 
 Сервер выводит список доступных инструментов и позволяет вызывать каждый из них. Проверить можно с помощью:
 ```bash
-podman-compose run --rm moex-mcp-server bin/console app:mcp-client
+podman-compose run --rm moex-mcp-server bin/console app:mcp-client --via=console
 ```
+
+Опция `--via` позволяет выбрать способ запуска сервера (`console`, `podman` или `docker`). По умолчанию используется `console`.
 
 
 ### Docker (Podman)

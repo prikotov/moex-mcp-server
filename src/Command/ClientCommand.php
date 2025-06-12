@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
@@ -24,25 +25,56 @@ class ClientCommand extends Command
         parent::__construct();
     }
 
+    protected function configure(): void
+    {
+        $this->addOption(
+            'via',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Launch server via: console, podman, docker',
+            'console'
+        );
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-//        $serverParams = new StdioServerParameters(
-//            command: 'bin/console',
-//            args: [
-//                'app:mcp-server',
-//            ],
-//        );
-        $serverParams = new StdioServerParameters(
-            command: 'podman',
-            args: [
-                'run',
-                '--rm',
-                '-i',
-                'moex-mcp-server',
-                'bin/console',
-                'app:mcp-server',
-            ],
-        );
+        $via = $input->getOption('via');
+        switch ($via) {
+            case 'podman':
+                $serverParams = new StdioServerParameters(
+                    command: 'podman',
+                    args: [
+                        'run',
+                        '--rm',
+                        '-i',
+                        'moex-mcp-server',
+                        'bin/console',
+                        'app:mcp-server',
+                    ],
+                );
+                break;
+            case 'docker':
+                $serverParams = new StdioServerParameters(
+                    command: 'docker',
+                    args: [
+                        'run',
+                        '--rm',
+                        '-i',
+                        'moex-mcp-server',
+                        'bin/console',
+                        'app:mcp-server',
+                    ],
+                );
+                break;
+            case 'console':
+            default:
+                $serverParams = new StdioServerParameters(
+                    command: 'bin/console',
+                    args: [
+                        'app:mcp-server',
+                    ],
+                );
+        }
 
         // Create client instance
         $client = new Client($this->logger);
