@@ -5,13 +5,27 @@
 
 Сервер использует библиотеку [`logiscape/mcp-sdk-php`](https://github.com/logiscape/mcp-sdk-php)
 
+## Конфигурация
 
-## Возможности
+```json
+{
+  "mcpServers": {
+    "moex": {
+      "command": "podman",
+      "args": ["run", "-i", "--rm", "docker.io/prikotov/moex-mcp-server:latest", "bin/console", "app:mcp-server"]
+    }
+  }
+}
+```
+
+## Возможности (Tools)
 
 - `get_security_specification` — спецификация ценной бумаги;
 - `get_security_indices` — индексы, в которые входит бумага;
 - `get_security_aggregates` — агрегированные результаты торгов;
 - `get_security_trade_data` — данные о торгах на фондовом рынке;
+
+# Информация для разработчиков
 
 ## Требования
 
@@ -36,24 +50,36 @@ composer install
 php bin/console app:mcp-server
 ```
 
-Сервер выводит список доступных инструментов и позволяет вызывать каждый из них.
+Либо с помощью podman
+```bash
+podman run --rm -i moex-mcp-server bin/console app:mcp-server
+```
 
-### Docker Compose
+Сервер выводит список доступных инструментов и позволяет вызывать каждый из них. Проверить можно с помощью:
+```bash
+podman-compose run --rm moex-mcp-server bin/console app:mcp-client
+```
+
+
+### Docker (Podman)
 
 В проекте присутствуют `Dockerfile` и `compose.yaml`. Чтобы собрать и запустить контейнер, выполните:
 
 ```bash
-docker compose up --build
+podman build -t moex-mcp-server .
 ```
-
-Контейнер запустит команду `php bin/console` внутри себя.
 
 ## Тесты
 
-После установки зависимостей выполните:
 
 ```bash
 ./bin/phpunit
+```
+
+Или
+
+```bash
+podman-compose run --rm moex-mcp-server bin/phpunit
 ```
 
 Тесты подключают клиента к серверу и вызывают его инструменты.
@@ -64,6 +90,7 @@ docker compose up --build
 - `bin/` — консольные скрипты;
 - `config/` — конфигурация Symfony;
 - `tests/` — интеграционные тесты.
+- `var/log` — логи приложения.
 
 ## Лицензия
 
