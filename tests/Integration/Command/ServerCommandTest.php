@@ -121,4 +121,40 @@ class ServerCommandTest extends KernelTestCase
         $this->assertStringContainsString('marketdata', $resAsJson);
         $this->assertStringContainsString('Сбербанк', $resAsJson);
     }
+
+    public function testGetSecuritySpecificationWithoutSecurity(): void
+    {
+        $session = $this->startSession();
+        $res = $session->callTool('get_security_specification', []);
+        $this->assertTrue($res->isError);
+        $this->assertStringContainsString('Missing parameter', $res->content[0]->text);
+        $this->assertStringContainsString('security', $res->content[0]->text);
+    }
+
+    public function testGetSecurityIndicesWithoutSecurity(): void
+    {
+        $session = $this->startSession();
+        $res = $session->callTool('get_security_indices', []);
+        $this->assertTrue($res->isError);
+        $this->assertStringContainsString('Missing parameter', $res->content[0]->text);
+        $this->assertStringContainsString('security', $res->content[0]->text);
+    }
+
+    public function testGetSecurityAggregatesWithoutSecurity(): void
+    {
+        $session = $this->startSession();
+        $res = $session->callTool('get_security_aggregates', []);
+        $this->assertTrue($res->isError);
+        $this->assertStringContainsString('Missing parameter', $res->content[0]->text);
+        $this->assertStringContainsString('security', $res->content[0]->text);
+    }
+
+    public function testGetSecurityTradeDataWithoutSecurity(): void
+    {
+        $session = $this->startSession();
+        $res = $session->callTool('get_security_trade_data', []);
+        $this->assertTrue($res->isError);
+        $this->assertStringContainsString('Missing parameter', $res->content[0]->text);
+        $this->assertStringContainsString('security', $res->content[0]->text);
+    }
 }
