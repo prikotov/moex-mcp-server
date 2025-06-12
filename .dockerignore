@@ -3,3 +3,4 @@ var/*
 !var/cache
 !var/log
 tests
+/vendor
