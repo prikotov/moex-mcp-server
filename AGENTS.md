@@ -10,12 +10,12 @@
 
 ## Требования к веткам
 
-- [ ] Название ветки - только на английском языке.
+- [ ] Название ветки должно быть написано только на английском языке.
 - [ ] Формат названия ветки: `codex/<task-description-in-english>`. Пример: `codex/add-mit-license`
 
 ## Требования к Pull Request (PR)
 
-- [ ] Заголовок PR — на английском языке, формат: `[codex] <Brief description>`. Пример заголовка PR: `[codex] Add MIT license`
+- [ ] Заголовок к Pull Request должен быть написан на английском языке, формат: `[codex] <Brief description>`. Пример заголовка PR: `[codex] Add MIT license`
 - [ ] В PR должны быть обязательные разделы:
 
 ### Summary
