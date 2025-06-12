@@ -26,9 +26,20 @@ class ClientCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+//        $serverParams = new StdioServerParameters(
+//            command: 'bin/console',
+//            args: [
+//                'app:mcp-server',
+//            ],
+//        );
         $serverParams = new StdioServerParameters(
-            command: 'bin/console',
+            command: 'podman',
             args: [
+                'run',
+                '--rm',
+                '-i',
+                'moex-mcp-server',
+                'bin/console',
                 'app:mcp-server',
             ],
         );
@@ -74,8 +85,11 @@ class ClientCommand extends Command
             // Close the server connection
             if (isset($client)) {
                 $client->close();
+                echo "Close the server connection.\n";
             }
         }
+
+        echo "Done.\n";
 
         return Command::SUCCESS;
     }

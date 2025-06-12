@@ -113,7 +113,9 @@ class ServerCommand extends Command
         // Create initialization options and run server
         $initOptions = $server->createInitializationOptions();
         $runner = new ServerRunner($server, $initOptions, $this->logger);
+        $this->logger->info('ServerCommand: run server');
         $runner->run();
+        $this->logger->info('ServerCommand: server down');
 
         return Command::SUCCESS;
     }

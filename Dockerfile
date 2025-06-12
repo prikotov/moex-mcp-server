@@ -1,5 +1,8 @@
 FROM php:8.4-cli-alpine
 
+RUN apk add --no-cache tini
+ENTRYPOINT ["/sbin/tini", "--"]
+
 RUN apk add --no-cache \
         icu-dev libzip-dev oniguruma-dev zlib-dev git unzip \
     && docker-php-ext-install intl zip opcache
