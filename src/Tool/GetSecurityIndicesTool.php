@@ -27,7 +27,7 @@ class GetSecurityIndicesTool implements ToolInterface
 
     public function getDescription(): string
     {
-        return 'Список индексов в которые входит бумага.';
+        return 'Показать перечень индексов Московской биржи, в которые включена данная бумага.';
     }
 
     public function getTool(): Tool
