@@ -27,16 +27,6 @@ class ClientCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $serverParams = new StdioServerParameters(
-            command: 'podman-compose',
-            args: [
-                'run',
-                '--rm',
-                'moex-mcp-server',
-                'bin/console',
-                'app:mcp-server',
-            ],
-        );
-        $serverParams = new StdioServerParameters(
             command: 'bin/console',
             args: [
                 'app:mcp-server',
