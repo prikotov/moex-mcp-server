@@ -28,7 +28,7 @@ class GetSecurityAggregatesTool implements ToolInterface
 
     public function getDescription(): string
     {
-        return 'Вернуть агрегированные итоги торгов по инструменту на указанную дату по всем рынкам.';
+        return 'Вернуть агрегированные итоги торгов на Московской бирже по инструменту на указанную дату.';
     }
 
     public function getTool(): Tool

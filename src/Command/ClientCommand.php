@@ -48,8 +48,7 @@ class ClientCommand extends Command
                         '--rm',
                         '-i',
                         'moex-mcp-server',
-                        'bin/console',
-                        'app:mcp-server',
+                        'bin/server',
                     ],
                 );
                 break;
@@ -61,18 +60,14 @@ class ClientCommand extends Command
                         '--rm',
                         '-i',
                         'moex-mcp-server',
-                        'bin/console',
-                        'app:mcp-server',
+                        'bin/server',
                     ],
                 );
                 break;
             case 'console':
             default:
                 $serverParams = new StdioServerParameters(
-                    command: 'bin/console',
-                    args: [
-                        'app:mcp-server',
-                    ],
+                    command: 'bin/server',
                 );
         }
 

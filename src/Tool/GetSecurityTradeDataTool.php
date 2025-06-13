@@ -27,7 +27,7 @@ class GetSecurityTradeDataTool implements ToolInterface
 
     public function getDescription(): string
     {
-        return 'Вернуть текущие рыночные данные по инструменту на выбранном режиме торгов.';
+        return 'Вернуть текущие рыночные данные по инструменту на фондовом рынке Московской биржи.';
     }
 
     public function getTool(): Tool

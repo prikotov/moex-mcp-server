@@ -12,7 +12,7 @@
   "mcpServers": {
     "moex": {
       "command": "podman",
-      "args": ["run", "-i", "--rm", "docker.io/prikotov/moex-mcp-server:latest", "bin/console", "app:mcp-server"]
+      "args": ["run", "-i", "--rm", "docker.io/prikotov/moex-mcp-server:latest", "bin/server"]
     }
   }
 }
@@ -47,10 +47,15 @@ composer install
 ### Локально
 
 ```bash
+bin/server
+```
+
+Либо традиционным способом:
+```bash
 php bin/console app:mcp-server
 ```
 
-Либо с помощью podman
+Либо с помощью podman:
 ```bash
 podman run --rm -i moex-mcp-server bin/console app:mcp-server
 ```
@@ -73,7 +78,6 @@ podman build -t moex-mcp-server .
 
 ## Тесты
 
-
 ```bash
 ./bin/phpunit
 ```
@@ -89,6 +93,7 @@ podman-compose run --rm moex-mcp-server bin/phpunit
 ## Структура проекта
 
 - `src/` — исходный код приложения;
+- `src/Tool` — исходный код Tools;
 - `bin/` — консольные скрипты;
 - `config/` — конфигурация Symfony;
 - `tests/` — интеграционные тесты.

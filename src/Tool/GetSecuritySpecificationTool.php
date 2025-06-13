@@ -27,7 +27,7 @@ class GetSecuritySpecificationTool implements ToolInterface
 
     public function getDescription(): string
     {
-        return 'Вернуть спецификацию указанного инструмента из ISS МОEX.';
+        return 'Вернуть спецификацию указанного инструмента из ISS МОEX на Московской бирже.';
     }
 
     public function getTool(): Tool
