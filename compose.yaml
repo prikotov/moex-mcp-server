@@ -7,6 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: moex-mcp-server:latest
+    user: appuser
     init: true
     container_name: moex-mcp-server
     working_dir: /app
