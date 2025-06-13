@@ -17,3 +17,7 @@ COPY . .
 RUN composer dump-autoload --optimize \
     && composer run-script post-install-cmd \
     && rm -rf var
+
+# Create application user and switch to it
+RUN adduser -D appuser
+USER appuser
