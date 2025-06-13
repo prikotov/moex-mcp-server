@@ -1,7 +1,7 @@
 FROM php:8.4-cli-alpine
 
 RUN apk add --no-cache tini
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/sbin/tini", "-s", "--"]
 
 RUN apk add --no-cache \
         icu-dev libzip-dev oniguruma-dev zlib-dev git unzip \
@@ -15,8 +15,7 @@ COPY composer.* ./
 RUN composer install --no-scripts --no-autoloader --no-interaction
 COPY . .
 RUN composer dump-autoload --optimize \
-    && composer run-script post-install-cmd \
-    && rm -rf var
+    && composer run-script post-install-cmd
 
 # Create application user and switch to it
 RUN adduser -D appuser
