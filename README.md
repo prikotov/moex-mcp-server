@@ -60,13 +60,19 @@ php bin/console app:mcp-server
 podman run --rm -i moex-mcp-server bin/console app:mcp-server
 ```
 
+Либо с помощью docker:
+```bash
+docker run --rm -i moex-mcp-server bin/console app:mcp-server
+```
+
 Сервер выводит список доступных инструментов и позволяет вызывать каждый из них. Проверить можно с помощью:
 ```bash
 podman-compose run --rm moex-mcp-server bin/console app:mcp-client --via=console
+# или
+docker-compose run --rm moex-mcp-server bin/console app:mcp-client --via=console
 ```
 
 Опция `--via` позволяет выбрать способ запуска сервера (`console`, `podman` или `docker`). По умолчанию используется `console`.
-
 
 ### Docker (Podman)
 
@@ -74,6 +80,20 @@ podman-compose run --rm moex-mcp-server bin/console app:mcp-client --via=console
 
 ```bash
 podman build -t moex-mcp-server .
+# или
+docker build -t moex-mcp-server .
+```
+
+## Makefile
+
+Для автоматизации типовых задач используется `Make`. Основные цели:
+
+```bash
+make help         # вывести справку
+make build        # собрать Docker-образ
+make push         # отправить образ в репозиторий
+make cache-clear  # очистить кэш приложения
+make test         # запустить тесты и пример клиента
 ```
 
 ## Тесты
