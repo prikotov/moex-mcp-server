@@ -11,8 +11,8 @@
 {
   "mcpServers": {
     "moex": {
-      "command": "podman",
-      "args": ["run", "-i", "--rm", "docker.io/prikotov/moex-mcp-server:latest", "bin/server"]
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "prikotov/moex-mcp-server:latest", "bin/server"]
     }
   }
 }
