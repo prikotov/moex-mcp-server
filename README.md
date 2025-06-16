@@ -106,6 +106,8 @@ make test         # запустить тесты и пример клиента
 
 ```bash
 podman-compose run --rm moex-mcp-server bin/phpunit
+# или 
+docker-compose run --rm moex-mcp-server bin/phpunit
 ```
 
 Тесты подключают клиента к серверу и вызывают его инструменты.
