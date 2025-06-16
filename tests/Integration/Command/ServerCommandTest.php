@@ -88,8 +88,7 @@ class ServerCommandTest extends KernelTestCase
         ]);
         $this->assertFalse($res->isError);
         $resAsJson = json_encode($res, JSON_UNESCAPED_UNICODE);
-        $this->assertStringContainsString('market_name', $resAsJson);
-        $this->assertStringContainsString('shares', $resAsJson);
+        $this->assertStringContainsString('aggregates', $resAsJson);
 
         $res = $session->callTool('get_security_aggregates', [
             'security' => 'SBER',

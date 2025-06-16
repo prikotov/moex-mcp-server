@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:mcp-server',
-    description: 'Протестировать MCP',
+    description: 'Запуск MCP сервера',
 )]
 class ServerCommand extends Command
 {
@@ -34,59 +34,6 @@ class ServerCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $server = new Server('moex-mcp-server', $this->logger);
-
-        // // Register prompt handlers
-        // $server->registerHandler('prompts/list', function ($params) {
-        //     $prompt = new Prompt(
-        //         name: 'example-prompt',
-        //         description: 'An example prompt template',
-        //         arguments: [
-        //             new PromptArgument(
-        //                 name: 'arg1',
-        //                 description: 'Example argument',
-        //                 required: true
-        //             )
-        //         ]
-        //     );
-        //     return new ListPromptsResult([$prompt]);
-        // });
-
-        // $server->registerHandler('prompts/get', function (GetPromptRequestParams $params) {
-
-        //     $name = $params->name;
-        //     $arguments = $params->arguments;
-
-        //     if ($name !== 'example-prompt') {
-        //         throw new \InvalidArgumentException("Unknown prompt: {$name}");
-        //     }
-
-        //     // Get argument value safely
-        //     $argValue = $arguments ? $arguments->arg1 : 'none';
-
-        //     $prompt = new Prompt(
-        //         name: 'example-prompt',
-        //         description: 'An example prompt template',
-        //         arguments: [
-        //             new PromptArgument(
-        //                 name: 'arg1',
-        //                 description: 'Example argument',
-        //                 required: true
-        //             )
-        //         ]
-        //     );
-
-        //     return new GetPromptResult(
-        //         messages: [
-        //             new PromptMessage(
-        //                 role: Role::USER,
-        //                 content: new TextContent(
-        //                     text: "Example prompt text with argument: $argValue"
-        //                 )
-        //             )
-        //         ],
-        //         description: 'Example prompt'
-        //     );
-        // });
 
         // Register tool handlers
         $server->registerHandler('tools/list', function ($params) {

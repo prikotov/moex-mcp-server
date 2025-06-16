@@ -1,6 +1,6 @@
 .idea
 .env.local
 .git
+tests/
 var/
-tests/.phpunit.cache
 vendor/

@@ -2,14 +2,13 @@ volumes:
   cache: # cache for composer, psalm, etc
 
 services:
-  moex-mcp-server:
+  mcp-server:
     build:
       context: .
       dockerfile: Dockerfile
-    image: moex-mcp-server:latest
-    user: appuser
+    image: ${IMAGE_REPO}/${IMAGE_NAME}:${IMAGE_TAG}
     init: true
-    container_name: moex-mcp-server
+    container_name: ${IMAGE_NAME}
     working_dir: /app
     environment:
       APP_ENV: dev
